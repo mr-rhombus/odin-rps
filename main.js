@@ -52,9 +52,9 @@ function getComputerChoice() {
 function getPlayerChoice() {
   let playerChoiceIsValid = false;
   let playerChoice;
-  while ( !playerChoiceIsValid ) {
+  while (!playerChoiceIsValid) {
     playerChoice = prompt("Please type in your choice (rock, paper, or scissors): ");
-    if ( choiceIsValid(playerChoice) ) {
+    if (choiceIsValid(playerChoice)) {
       return playerChoice;
     } else {
       alert("Please enter a valid choice, either rock, paper, or scissors!")
@@ -70,7 +70,7 @@ function choiceIsValid(choice) {
 
 // Determine game winner
 function getGameWinner(computerChoice, playerChoice) {
-  if ( computerChoice == playerChoice ) {
+  if (computerChoice == playerChoice) {
     return 'tie';
   } else if (
     computerChoice == 'rock' && playerChoice == 'scissors' ||
@@ -86,9 +86,9 @@ function getGameWinner(computerChoice, playerChoice) {
 // Determine match winner
 function getMatchWinner(computerScore, playerScore) {
   let resultMessage;
-  if ( computerScore == playerScore ) {
+  if (computerScore == playerScore) {
     resultMessage = 'Tie game!'
-  } else if ( computerScore > playerScore ) {
+  } else if (computerScore > playerScore) {
     resultMessage = 'Computer wins!'
   } else {
     resultMessage = 'You win!'

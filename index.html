@@ -1,11 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Odin RPS</title>
-</head>
-<body>
-  <script src="./main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odin RPS</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="./main.js" defer></script>
+  </head>
+  <body>
+    <div id="scoreboards">
+      <div>
+        Player Score 👾:
+        <p id="playerScore">0</p>
+      </div>
+      <div>
+        Opponent Score 🤖:
+        <p id="computerScore">0</p>
+      </div>
+      <div>
+        Round:
+        <p id="roundNumber">1</p>
+      </div>
+    </div>
+    <div id="game">
+      <h1>Make your choice!</h1>
+      <p>Awaiting first choice...</p>
+      <button id="rock">Rock</button>
+      <button id="paper">Paper</button>
+      <button id="scissors">Scissors</button>
+    </div>
+    <div id="matchResult">
+      <h1></h1>
+    </div>
+  </body>
 </html>

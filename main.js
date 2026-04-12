@@ -1,50 +1,42 @@
-const welcomeMessage = `
-⚡️------------------------------------------------⚡️
-| Welcome to Odin Rock 🪨, Paper 📄, Scissors ✂️ ! |
-⚡️------------------------------------------------⚡️
-`;
-alert(welcomeMessage);
+const computerScore = document.querySelector("#computerScore");
+const playerScore = document.querySelector("#playerScore");
+const numRounds = document.querySelector("#roundNumber");
+const gameWinnerPara = document.querySelector("#game > p");
+const matchResultDiv = document.querySelector("#matchResult");
+const endGameMessage = document.querySelector("#matchResult > h1");
 
-// 1 match = 5 rounds, winner = most wins across all rounds
-// Display score after each round
-let computerScore = 0;
-let playerScore = 0;
-let numRounds = 0;
+let allButtons = document.querySelectorAll("button");
+allButtons.forEach((button) =>
+  button.addEventListener("click", () => {
+    playerChoice = button.textContent.toLowerCase();
+    playRound(playerChoice);
+  }),
+);
 
-// Play entire game
-while (numRounds < 5) {
-  numRounds++;
-  let computerChoice = getComputerChoice()
-  let playerChoice = getPlayerChoice()
-  let gameWinner = getGameWinner(computerChoice, playerChoice)
-  switch (gameWinner) {
-    case 'computer':
-      computerScore++;
-      break;
-    case 'player':
-      playerScore++;
-      break;
-    default:
-      break;
+// Play a single round
+function playRound(playerChoice) {
+  let computerChoice = getComputerChoice();
+  let winner = getGameWinner(computerChoice, playerChoice);
+  updateScoreboard(winner);
+  displayGameResult(winner);
+  if (
+    Number(computerScore.textContent) == 3 ||
+    Number(playerScore.textContent) == 3
+  ) {
+    endGame();
   }
-  let gameResultMessage = `
-  ${getGameResult(gameWinner)}
-  ${getScoreboard(computerScore, playerScore)}
-  `
-  alert(gameResultMessage)
 }
-getMatchWinner(computerScore, playerScore)
 
 // Get computer choice
 function getComputerChoice() {
   let computerChoice = Math.floor(Math.random() * 3);
   switch (computerChoice) {
     case 0:
-      return 'rock';
+      return "rock";
     case 1:
-      return 'paper';
+      return "paper";
     case 2:
-      return 'scissors';
+      return "scissors";
   }
 }
 
@@ -53,67 +45,98 @@ function getPlayerChoice() {
   let playerChoiceIsValid = false;
   let playerChoice;
   while (!playerChoiceIsValid) {
-    playerChoice = prompt("Please type in your choice (rock, paper, or scissors): ");
+    playerChoice = prompt(
+      "Please type in your choice (rock, paper, or scissors): ",
+    );
     if (choiceIsValid(playerChoice)) {
       return playerChoice;
     } else {
-      alert("Please enter a valid choice, either rock, paper, or scissors!")
+      alert("Please enter a valid choice, either rock, paper, or scissors!");
     }
   }
-
 }
 
 // Validate player choice
 function choiceIsValid(choice) {
-  return (choice.toLowerCase() == 'rock') || (choice.toLowerCase() == 'paper') || (choice.toLowerCase() == 'scissors')
+  return (
+    choice.toLowerCase() == "rock" ||
+    choice.toLowerCase() == "paper" ||
+    choice.toLowerCase() == "scissors"
+  );
 }
 
 // Determine game winner
 function getGameWinner(computerChoice, playerChoice) {
   if (computerChoice == playerChoice) {
-    return 'tie';
+    return "tie";
   } else if (
-    computerChoice == 'rock' && playerChoice == 'scissors' ||
-    computerChoice == 'paper' && playerChoice == 'rock' ||
-    computerChoice == 'scissors' && playerChoice == 'paper'
+    (computerChoice == "rock" && playerChoice == "scissors") ||
+    (computerChoice == "paper" && playerChoice == "rock") ||
+    (computerChoice == "scissors" && playerChoice == "paper")
   ) {
-    return 'computer'
+    return "computer";
   } else {
-    return 'player'
+    return "player";
   }
 }
 
-// Determine match winner
-function getMatchWinner(computerScore, playerScore) {
-  let resultMessage;
-  if (computerScore == playerScore) {
-    resultMessage = 'Tie game!'
-  } else if (computerScore > playerScore) {
-    resultMessage = 'Computer wins!'
-  } else {
-    resultMessage = 'You win!'
+function updateScoreboard(winner) {
+  numRounds.textContent = Number(numRounds.textContent) + 1;
+  switch (winner) {
+    case "computer":
+      computerScore.textContent = Number(computerScore.textContent) + 1;
+      break;
+    case "player":
+      playerScore.textContent = Number(playerScore.textContent) + 1;
+      break;
+    default:
+      break;
   }
-  alert('The results are in! After 5 rounds...')
-  let matchOverMessage = `
-  ${resultMessage}
-  ${getScoreboard(computerScore, playerScore)}
-  `
-  alert(matchOverMessage)
-}
-
-// Live scoreboard
-function getScoreboard(computerScore, playerScore) {
-  return `🤖 ${computerScore} : ${playerScore} 👤`
 }
 
 // Game result
-function getGameResult(gameWinner) {
+function displayGameResult(gameWinner) {
+  gameWinnerPara.textContent = "test";
   switch (gameWinner) {
-    case 'computer':
-      return 'Computer wins, too bad...'
-    case 'player':
-      return 'You win, great move!'
+    case "computer":
+      gameWinnerPara.textContent = "Computer wins, too bad...";
+      break;
+    case "player":
+      gameWinnerPara.textContent = "You win, great move!";
+      break;
     default:
-      return 'Tie! Good game 🤝'
+      gameWinnerPara.textContent = "Tie! Good game 🤝";
+      break;
   }
+}
+
+function endGame() {
+  const finalPlayerScore = Number(playerScore.textContent);
+  const finalComputerScore = Number(computerScore.textContent);
+  let winner = finalPlayerScore > finalComputerScore ? "player" : "computer";
+  switch (winner) {
+    case "player":
+      endGameMessage.textContent = `🥳 You win, congratulations! Final score: ${finalPlayerScore} - ${finalComputerScore} 🏆`;
+      break;
+    case "computer":
+      endGameMessage.textContent = `😥 Computer wins. Final score: ${finalComputerScore} - ${finalPlayerScore} 😔`;
+      break;
+  }
+  allButtons.forEach((button) => (button.disabled = true));
+  const resetButton = document.createElement("button");
+  resetButton.textContent = "Reset";
+  resetButton.setAttribute("id", "reset-button");
+  resetButton.addEventListener("click", () => resetGame());
+  matchResultDiv.appendChild(resetButton);
+}
+
+function resetGame() {
+  playerScore.textContent = 0;
+  computerScore.textContent = 0;
+  numRounds.textContent = 1;
+  gameWinnerPara.textContent = "Awaiting first choice...";
+  endGameMessage.textContent = "";
+  allButtons.forEach((button) => (button.disabled = false));
+  const resetButton = document.querySelector("#reset-button");
+  resetButton.remove();
 }
